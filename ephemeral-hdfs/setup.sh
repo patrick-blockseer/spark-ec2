@@ -3,8 +3,8 @@
 EPHEMERAL_HDFS=/root/ephemeral-hdfs
 
 # Set hdfs url to make it easier
-HDFS_URL="hdfs://$PUBLIC_DNS:9000"
-echo "export HDFS_URL=$HDFS_URL" >> ~/.bash_profile
+#HDFS_URL="hdfs://$PUBLIC_DNS:9000"
+#echo "export HDFS_URL=$HDFS_URL" >> ~/.bash_profile
 
 pushd /root/spark-ec2/ephemeral-hdfs > /dev/null
 source ./setup-slave.sh
@@ -26,20 +26,21 @@ else
   $EPHEMERAL_HDFS/bin/hadoop namenode -format
 fi
 
-echo "Starting ephemeral HDFS..."
+echo "Ephemeral HDFS installed, will not start by override"
 
 # This is different depending on version.
 case "$HADOOP_MAJOR_VERSION" in
   1)
-    $EPHEMERAL_HDFS/bin/start-dfs.sh
+    #$EPHEMERAL_HDFS/bin/start-dfs.sh
+    $EPHEMERAL_HDFS/bin/stop-all.sh
     ;;
   2)
-    $EPHEMERAL_HDFS/sbin/start-dfs.sh
+    #$EPHEMERAL_HDFS/sbin/start-dfs.sh
     ;;
-  yarn) 
-    $EPHEMERAL_HDFS/sbin/start-dfs.sh
-    echo "Starting YARN"
-    $EPHEMERAL_HDFS/sbin/start-yarn.sh
+  yarn)
+    #$EPHEMERAL_HDFS/sbin/start-dfs.sh
+    #echo "Starting YARN"
+    #$EPHEMERAL_HDFS/sbin/start-yarn.sh
     ;;
   *)
      echo "ERROR: Unknown Hadoop version"
