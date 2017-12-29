@@ -34,24 +34,24 @@ if [[ $instance_type == r3* || $instance_type == i2* || $instance_type == hi1* ]
   rm -rf /mnt*
   mkdir /mnt
   # To turn TRIM support on, uncomment the following line.
-  #echo '/dev/sdb /mnt  ext4  defaults,noatime,nodiratime,discard 0 0' >> /etc/fstab
-  mkfs.ext4 -E lazy_itable_init=0,lazy_journal_init=0 /dev/sdb
-  mount -o $EXT4_MOUNT_OPTS /dev/sdb /mnt
+  #echo '/dev/xvdb /mnt  ext4  defaults,noatime,nodiratime,discard 0 0' >> /etc/fstab
+  mkfs.ext4 -E lazy_itable_init=0,lazy_journal_init=0 /dev/xvdb
+  mount -o $EXT4_MOUNT_OPTS /dev/xvdb /mnt
 
   if [[ $instance_type == "r3.8xlarge" || $instance_type == "hi1.4xlarge" ]]; then
     mkdir /mnt2
     # To turn TRIM support on, uncomment the following line.
-    #echo '/dev/sdc /mnt2  ext4  defaults,noatime,nodiratime,discard 0 0' >> /etc/fstab
+    #echo '/dev/xvdc /mnt2  ext4  defaults,noatime,nodiratime,discard 0 0' >> /etc/fstab
     if [[ $instance_type == "r3.8xlarge" ]]; then
-      mkfs.ext4 -E lazy_itable_init=0,lazy_journal_init=0 /dev/sdc      
-      mount -o $EXT4_MOUNT_OPTS /dev/sdc /mnt2
+      mkfs.ext4 -E lazy_itable_init=0,lazy_journal_init=0 /dev/xvdc
+      mount -o $EXT4_MOUNT_OPTS /dev/xvdc /mnt2
     fi
     # To turn TRIM support on, uncomment the following line.
-    #echo '/dev/sdf /mnt2  ext4  defaults,noatime,nodiratime,discard 0 0' >> /etc/fstab
+    #echo '/dev/xvdf /mnt2  ext4  defaults,noatime,nodiratime,discard 0 0' >> /etc/fstab
     if [[ $instance_type == "hi1.4xlarge" ]]; then
-      mkfs.ext4 -E lazy_itable_init=0,lazy_journal_init=0 /dev/sdf      
-      mount -o $EXT4_MOUNT_OPTS /dev/sdf /mnt2
-    fi    
+      mkfs.ext4 -E lazy_itable_init=0,lazy_journal_init=0 /dev/xvdf
+      mount -o $EXT4_MOUNT_OPTS /dev/xvdf /mnt2
+    fi
   fi
 fi
 
@@ -87,18 +87,18 @@ function setup_ebs_volume {
   fi
 }
 
-# Format and mount EBS volume (/dev/sd[s, t, u, v, w, x, y, z]) as /vol[x] if the device exists
-setup_ebs_volume /dev/sds /vol0
-setup_ebs_volume /dev/sdt /vol1
-setup_ebs_volume /dev/sdu /vol2
-setup_ebs_volume /dev/sdv /vol3
-setup_ebs_volume /dev/sdw /vol4
-setup_ebs_volume /dev/sdx /vol5
-setup_ebs_volume /dev/sdy /vol6
-setup_ebs_volume /dev/sdz /vol7
+# Format and mount EBS volume (/dev/xvd[s, t, u, v, w, x, y, z]) as /vol[x] if the device exists
+setup_ebs_volume /dev/xvds /vol0
+setup_ebs_volume /dev/xvdt /vol1
+setup_ebs_volume /dev/xvdu /vol2
+setup_ebs_volume /dev/xvdv /vol3
+setup_ebs_volume /dev/xvdw /vol4
+setup_ebs_volume /dev/xvdx /vol5
+setup_ebs_volume /dev/xvdy /vol6
+setup_ebs_volume /dev/xvdz /vol7
 
 # Alias vol to vol3 for backward compatibility: the old spark-ec2 script supports only attaching
-# one EBS volume at /dev/sdv.
+# one EBS volume at /dev/xvdv.
 if [[ -e /vol3 && ! -e /vol ]]; then
   ln -s /vol3 /vol
 fi
