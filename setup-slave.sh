@@ -67,7 +67,7 @@ function setup_ebs_volume {
     if ! blkid $device; then
       mkdir $mount_point
       yum install -q -y xfsprogs
-      if mkfs.xfs -q $device; then
+      if mkfs.ext4 -q $device; then
         mount -o $XFS_MOUNT_OPTS $device $mount_point
         chmod -R a+w $mount_point
       else
